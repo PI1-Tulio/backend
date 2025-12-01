@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Delivery {
+  id           Int           @id @default(autoincrement())
+  name         String
+  potL         Int
+  potR         Int
+  startTime    DateTime?
+  endTime      DateTime?
+  instructions Instruction[]
+}
+
+enum InstructionAction {
+  MOVE
+  TURN
+}
+
+model Instruction {
+  id               Int               @id @default(autoincrement())
+  action           InstructionAction
+  value            Int
+  actuallyExecuted Int               @default(0)
+  startTime        DateTime?
+  endTime          DateTime?
+
+  delivery   Delivery? @relation(fields: [deliveryId], references: [id])
+  deliveryId Int
+}
