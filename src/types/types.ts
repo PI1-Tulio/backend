@@ -9,6 +9,7 @@ export interface ServerToClientEvents {
   // seus eventos do cliente...
   "instructions-change": (data: Partial<Instruction>) => void;
   "delivery-change": (data: Partial<Delivery>) => void;
+  "battery-update": (data: { percentage: number }) => void;
 }
 
 export interface InterServerEvents {

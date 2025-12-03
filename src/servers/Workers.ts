@@ -12,6 +12,10 @@ interface UpdateTimePayload {
   id: number;
 }
 
+interface BatteryInfo {
+  percentage: number;
+}
+
 export async function startWorkers(): Promise<void> {
   const pubSub = AdaptersFactory.getPubSub();
   await pubSub.connect(env.MQTT_BROKER_URL);
@@ -73,5 +77,10 @@ export async function startWorkers(): Promise<void> {
       .catch((err) => {
         console.error("Failed to update delivery ended:", err);
       });
+  });
+
+  pubSub.on("battery/percentage", (topic, message) => {
+    const jsonMessage: BatteryInfo = JSON.parse(message.toString());
+    io.emit("battery-update", jsonMessage);
   });
 }
